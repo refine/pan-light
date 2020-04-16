@@ -223,6 +223,8 @@ func (v *Vip) DeleteFile(serverPath string) (err error) {
 }
 
 func (v *Vip) SaveFileByMd5(md5, sliceMd5, path string, contentLength int64) (fid string, fileSize int64, err error) {
+	err = errors.New("vip通道已关闭, 请联系管理员")
+	return
 	ss := v.loginSession()
 	data, err := v.request("POST", "https://pan.baidu.com/api/rapidupload", gson{
 		"rtype":      1,
@@ -267,11 +269,11 @@ func (v *Vip) LinkByFid(fid string) (link string, err error) {
 		"fidlist":    "[" + fid + "]",
 		"type":       "dlink",
 		"channel":    "chunlei",
-		"web":        1,
+		"web":        5,
 		"app_id":     "250528",
 		"bdstoken":   ss.Bdstoken,
 		"logid":      time.Now().UnixNano(),
-		"clienttype": 0,
+		"clienttype": 5,
 	}, nil)
 	if err != nil {
 		err = errors.Wrap(err, "")
